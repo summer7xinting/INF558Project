@@ -1,0 +1,11 @@
+# https://query.wikidata.org/
+SELECT ?URI ?URILabel ?comURI
+WHERE
+{
+	?URI wdt:P31 wd:Q4830453 ; # business
+		wdt:P17 wd:Q30 . # USA
+	OPTIONAL { ?URI wdt:P856 ?comURI .}          
+	SERVICE wikibase:label {
+		bd:serviceParam wikibase:language "en" .
+	}
+}

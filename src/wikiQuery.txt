@@ -1,0 +1,19 @@
+SELECT ?URI ?URILabel ?comURI ?founded_by ?founded_byLabel ?CEO ?CEOLabel 
+?parent ?parentLabel ?subsidiary ?subsidiaryLabel 
+?owned_by ?owned_byLabel ?owner_of ?owner_ofLabel ?total_revenue
+WHERE
+{
+	?URI wdt:P31 wd:Q4830453 ; # business
+         wdt:P17 wd:Q30 . # USA
+    
+    OPTIONAL { ?URI wdt:P856 ?comURI .}
+    OPTIONAL { ?URI wdt:P112 ?founded_by .}
+    OPTIONAL { ?URI wdt:P169 ?CEO .}
+    OPTIONAL { ?URI wdt:P749 ?parent .}
+    OPTIONAL { ?URI wdt:P355 ?subsidiary .}
+    OPTIONAL { ?URI wdt:P2139 ?total_revenue .}
+   
+  SERVICE wikibase:label {
+		bd:serviceParam wikibase:language "en" .
+	}
+}
