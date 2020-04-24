@@ -1,0 +1,3 @@
+Plan: 
+company RDF: example URI: (uri:xinting_myunghee:company:23andme): name, founded, headquarters, competitor, website, wikidata (CEO, parent, subsidiary, founded by), size, sector, rating, revenue
+job RDF: industry, job description, job title, location, salary est, company, skills (job description)
