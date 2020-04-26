@@ -52,7 +52,7 @@ export class CompanyDetailsComponent extends React.Component<
           <Column
             title="Value" dataIndex="value" key="value"
             render={(value) => {
-              if (value.type == "uri") {
+              if (value.type === "uri") {
                 if (value.value.includes("uri:xinting_myunghee") && !value.value.includes("job")) {
                   return (
                     <Link to={`/companies/${value.value}`}>

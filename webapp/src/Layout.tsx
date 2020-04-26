@@ -1,7 +1,7 @@
 import * as React from "react";
 import {Link} from "react-router-dom";
 import { Layout, Menu } from 'antd';
-import {inject, observer} from "mobx-react";
+import {inject} from "mobx-react";
 import {IStore} from "./stores";
 
 const { Header, Content, Footer } = Layout;
