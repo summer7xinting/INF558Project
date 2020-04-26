@@ -3,14 +3,128 @@ from flask_cors import CORS
 import subprocess
 import json
 import uuid
+import pandas as pd
 
 app = Flask(__name__)
 CORS(app)
 
 S_QUERY_EXEC = "/Users/summ7t/Downloads/apache-jena-fuseki-3.14.0/bin/s-query"
 CACHE_DIR = "/Users/summ7t/dev/INF558Project/sparql-cache"
+DATA_DIR = "/Users/summ7t/dev/INF558Project/data"
 SPARQL_ENDPOINT = "http://localhost:3030/projectDB/sparql"
 
+COMPANY_LIST = [
+    "dematic",
+    "cybercoders",
+    "astrazeneca",
+    "software engineering institute",
+    "the church of jesus christ of latter-day saints",
+    "walmart ecommerce",
+    "amazon",
+    "genworth",
+    "kapsch",
+    "caci international",
+    "novartis",
+    "atlassian",
+    "juniper networks",
+    "massmutual",
+    "mitre",
+    "novetta",
+    "osi engineering",
+    "advantage resourcing",
+    "boeing intelligence & analytics",
+    "jpmorgan chase",
+    "liberty mutual insurance",
+    "randstad",
+    "relativity",
+    "takeda pharmaceuticals",
+    "the judge group",
+    "esri",
+    "mission essential",
+    "adient",
+    "atterro",
+    "bluebird bio",
+    "centauri",
+    "honeywell",
+    "intuit - data",
+    "mantech",
+    "matrix resources",
+    "my job tank",
+    "reynolds american",
+    "staffing now",
+    "xilinx",
+    "adobe",
+    "american axle & manufacturing",
+    "amtec human capital",
+    "centurylink",
+    "collabera",
+    "dell",
+    "e-trade",
+    "fidelity talentsource",
+    "genentech",
+    "genesys",
+    "j.p. morgan chase & co",
+    "jp morgan chase & co.",
+    "mars",
+    "pfizer",
+    "pnnl",
+    "quicken loans inc.",
+    "the mil corporation",
+    "us army ground vehicle systems center",
+    "western digital",
+    "workday",
+    "23andme",
+    "bioclinica inc.",
+    "cgi group  inc.",
+    "dcs corporation",
+    "decisive intel",
+    "general atomics",
+    "ignw",
+    "jlg industries",
+    "kratos defense & security solutions",
+    "neteffects inc.",
+    "north american lighting",
+    "npaworldwide recruitment network",
+    "numeric llc",
+    "raytheon",
+    "sandia national laboratories",
+    "scientific research corporation",
+    "synechron",
+    "technology navigators",
+    "the clorox company",
+    "university of nebraska lincoln",
+    "adp technology services inc",
+    "aic",
+    "ascent services group",
+    "avanade",
+    "cboe global markets",
+    "cdk global",
+    "citti handelsgesellschaft mbh & co. kg",
+    "clarus commerce",
+    "clearedge",
+    "demandbase",
+    "efolder inc.",
+    "eliassen group",
+    "ellie mae",
+    "equity residential",
+    "erc",
+    "fivestars",
+    "general dynamics mission systems inc",
+    "gsk",
+    "hays specialist recruitment",
+    "henkel",
+    "imodules",
+    "infoweb systems inc.",
+    "interactive brokers llc",
+    "intuit - software engineering",
+    "invitae",
+    "jbl resources",
+    "kronos bio",
+    "lrs",
+    "new england biolabs",
+    "nvidia"
+]
+COMPANY_LIST.sort()
 
 @app.route("/", methods=["GET"])
 def index():
@@ -26,17 +140,7 @@ def test_jena():
 
 @app.route("/companies", methods=["GET"])
 def list_company_names():
-    # TODO: create a company name file for cache purposes
-    data = [
-        "amazon",
-        "acara solutions",
-        "accela incorprated",
-        "acceleron pharma",
-        # "facebook",
-        "google llc",
-        "nvidia"
-    ]
-    return jsonify(data)
+    return jsonify(COMPANY_LIST)
 
 
 @app.route("/sparql", methods=["POST"])
@@ -75,11 +179,11 @@ def search_with_constraints_server():
     """
     if company_name:
         sparql_query += f"""
-        FILTER (?company_name = '{company_name}')
+        FILTER (lcase(?company_name) = lcase('{company_name}'))
         """
     if title:
         sparql_query += f"""
-        FILTER contains(?title, '{title}')
+        FILTER contains(lcase(?job_title), lcase('{title}'))
         """
     if job_type:
         sparql_query += f"""
@@ -87,11 +191,11 @@ def search_with_constraints_server():
         """
     if location:
         sparql_query += f"""
-        FILTER contains(?location, '{location}')
+        FILTER contains(lcase(?location), lcase('{location}'))
         """
     if skillset:
         sparql_query += f"""
-        FILTER contains(?job_description, '{skillset}')
+        FILTER contains(lcase(?job_description), lcase('{skillset}'))
         """
     sparql_query += """
     } """ + f"""

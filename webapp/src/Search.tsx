@@ -118,7 +118,28 @@ export class SearchComponent extends React.Component<
         company_uri: r.company_uri.value,
       })
     })
-    console.log(data)
+    // compute statistics on the run
+    const numOfJobs = data.length;
+    var listCompanies = data.map(d => d["company_uri"]);
+    const uniqueCompanies = listCompanies.filter(function(item, pos){
+      return listCompanies.indexOf(item) == pos; 
+    });
+    const numOfCompanies = uniqueCompanies.length;
+    var listLocations = data.map(d => d["location"]);
+    var locationCount = {};
+    var maxLocation = "";
+    var maxCount = 0;
+    for (var i = 0; i < listLocations.length; i++) {
+      var loc:string = listLocations[i];
+      // @ts-ignore
+      locationCount[loc] = locationCount[loc] ? locationCount[loc] + 1 : 1;
+      // @ts-ignore
+      if (locationCount[loc] > maxCount) {
+        maxLocation = loc;
+        // @ts-ignore
+        maxCount = locationCount[loc];
+      }
+    }
     return (
       <MyLayout>
         <Row style={{ verticalAlign: "middle" }}>
@@ -240,7 +261,11 @@ export class SearchComponent extends React.Component<
           </Col>
         </Row>
         <Row>
-          <p style={{ margin: "15px 0 0 0" }}>Here are the results:</p>
+          <pre style={{ margin: "15px 0 0 0" }}>Here are the results:<br/>
+            <span># Of Jobs: {numOfJobs}</span>
+            <span>       # Of Companies: {numOfCompanies ? numOfCompanies : 0}</span><br/>
+            <span>Mostly located at: {maxLocation ? maxLocation : "N/A"}</span><br/>
+          </pre>
         </Row>
         <Table dataSource={data}>
           <Column

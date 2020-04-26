@@ -1,0 +1,17 @@
+PREFIX my_ns: <uri:xinting_myunghee:>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+    
+SELECT ?job_uri ?company_uri ?company_name ?se_ds ?job_title ?location ?rating
+WHERE {
+    ?job_uri a my_ns:job ;
+             my_ns:company ?company_uri ;
+             my_ns:se_ds ?se_ds ;
+             my_ns:job_title ?job_title ;
+             schema:location ?location .
+    OPTIONAL {?job_uri schema:description ?job_description}
+    ?company_uri schema:name ?company_name .
+    OPTIONAL {?company_uri schema:aggregateRating ?rating}
+    FILTER CONTAINS(?company_name, 'ama')
+}
+
