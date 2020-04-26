@@ -2,3 +2,7 @@
 .ipynb_checkpoints/*
 __pycache__/*
 .*
+DB/*
+sparql-cache/*
+run/*
+webapp/node_modules/*
