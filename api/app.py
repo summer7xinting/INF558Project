@@ -126,6 +126,7 @@ COMPANY_LIST = [
 ]
 COMPANY_LIST.sort()
 
+
 @app.route("/", methods=["GET"])
 def index():
     return {"response": "Hello World!"}

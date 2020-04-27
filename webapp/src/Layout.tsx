@@ -52,11 +52,6 @@ export default class MyLayout extends React.Component<LayoutProps> {
               Search
             </Link>
           </Menu.Item>
-          <Menu.Item key="overview">
-            <Link to={"/overview"}>
-              Overview
-            </Link>
-          </Menu.Item>
           <Menu.Item key="sparql">
             <Link to={"/sparql"}>
               SPARQL
